@@ -2,7 +2,7 @@ import { updateUser } from "../services/users.ts";
 
 export default async ({ params, request, response }: any) => {
   const userId = params.id;
-
+  const body = await request.body()
   if (!userId) {
     response.status = 400;
     response.body = { msg: "Invalid user id" };
@@ -14,10 +14,9 @@ export default async ({ params, request, response }: any) => {
     response.body = { msg: "Invalid user data" };
     return;
   }
-
-  const {
-    value: { name, role, jiraAdmin }
-  } = await request.body();
+  
+  const values = await body.value
+  let { name, role, jiraAdmin } = values
 
   await updateUser(userId, { name, role, jiraAdmin });
 
